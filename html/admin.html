@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Sekolah Perempuan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f1f5f9;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #6d28d9 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .admin-section {
+            display: none;
+        }
+        .admin-section.active {
+            display: block;
+        }
+        .modal {
+            transition: opacity 0.3s ease;
+        }
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #a855f7;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body class="flex h-screen">
+
+    <aside class="w-64 bg-gray-800 text-white flex flex-col fixed h-full z-20">
+        <div class="h-20 flex items-center justify-center border-b border-gray-700">
+            <h1 class="text-xl font-bold">Admin Panel</h1>
+        </div>
+        <nav class="flex-1 px-4 py-6 space-y-2">
+            <a href="#dashboard" class="nav-link flex items-center px-4 py-2.5 text-gray-300 rounded-lg hover:bg-gray-700 hover:text-white">
+                <i class="ri-dashboard-line mr-3"></i> Dashboard
+            </a>
+            <a href="#pendaftar" class="nav-link flex items-center px-4 py-2.5 text-gray-300 rounded-lg hover:bg-gray-700 hover:text-white">
+                <i class="ri-team-line mr-3"></i> Data Pendaftar
+            </a>
+            <a href="#kelas" class="nav-link flex items-center px-4 py-2.5 text-gray-300 rounded-lg hover:bg-gray-700 hover:text-white">
+                <i class="ri-presentation-line mr-3"></i> Program Kelas
+            </a>
+            <a href="#literasi" class="nav-link flex items-center px-4 py-2.5 text-gray-300 rounded-lg hover:bg-gray-700 hover:text-white">
+                <i class="ri-book-open-line mr-3"></i> Pojok Literasi
+            </a>
+            <a href="#testimoni" class="nav-link flex items-center px-4 py-2.5 text-gray-300 rounded-lg hover:bg-gray-700 hover:text-white">
+                <i class="ri-chat-quote-line mr-3"></i> Testimoni
+            </a>
+            <a href="#pengaturan" class="nav-link flex items-center px-4 py-2.5 text-gray-300 rounded-lg hover:bg-gray-700 hover:text-white">
+                <i class="ri-settings-3-line mr-3"></i> Kontak & Pengaturan
+            </a>
+        </nav>
+        <div class="p-4 border-t border-gray-700">
+             <a href="#" class="flex items-center px-4 py-2.5 text-gray-300 rounded-lg hover:bg-red-500 hover:text-white">
+                <i class="ri-logout-box-r-line mr-3"></i> Logout
+            </a>
+        </div>
+    </aside>
+
+    <main class="flex-1 ml-64 p-8 overflow-y-auto">
+        
+        <section id="dashboard" class="admin-section">
+             <h2 class="text-3xl font-bold mb-8 gradient-text">Dashboard</h2>
+             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                 <div class="bg-white p-6 rounded-xl shadow-md">
+                     <p class="text-gray-500">Total Pendaftar</p>
+                     <p class="text-3xl font-bold text-gray-800">5</p>
+                 </div>
+                 <div class="bg-white p-6 rounded-xl shadow-md">
+                     <p class="text-gray-500">Total Kelas</p>
+                     <p class="text-3xl font-bold text-gray-800">3</p>
+                 </div>
+                  <div class="bg-white p-6 rounded-xl shadow-md">
+                     <p class="text-gray-500">Total Artikel</p>
+                     <p class="text-3xl font-bold text-gray-800">3</p>
+                 </div>
+                 <div class="bg-white p-6 rounded-xl shadow-md">
+                     <p class="text-gray-500">Total Testimoni</p>
+                     <p class="text-3xl font-bold text-gray-800">2</p>
+                 </div>
+             </div>
+        </section>
+        
+        <section id="pendaftar" class="admin-section">
+            <h2 class="text-3xl font-bold mb-8 gradient-text">Data Pendaftar Kelas</h2>
+            
+            <div class="mb-6 flex flex-col md:flex-row gap-4">
+                <div class="relative flex-grow">
+                    <input type="text" id="search-pendaftar" placeholder="Cari nama pendaftar..." class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg">
+                    <i class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                </div>
+                <select id="filter-kelas" class="px-4 py-3 border border-gray-300 rounded-lg">
+                    <option value="">Semua Kelas</option>
+                    <option value="Ibu Cakap Usaha">Ibu Cakap Usaha</option>
+                    <option value="Ibu Rawat Bumi">Ibu Rawat Bumi</option>
+                    <option value="Ibu Sejahtera">Ibu Sejahtera</option>
+                </select>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-md overflow-x-auto">
+                <table class="w-full text-left" id="tabel-pendaftar">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="p-4 font-semibold text-gray-600">Nama Lengkap</th>
+                            <th class="p-4 font-semibold text-gray-600">Kelas Dipilih</th>
+                            <th class="p-4 font-semibold text-gray-600">No. Telepon</th>
+                            <th class="p-4 font-semibold text-gray-600">Tgl Daftar</th>
+                            <th class="p-4 font-semibold text-gray-600 text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y">
+                        <tr data-nama="Siti Aminah" data-kelas="Ibu Cakap Usaha">
+                            <td class="p-4 font-medium text-gray-800">Siti Aminah</td>
+                            <td class="p-4 text-gray-600"><span class="px-2 py-1 text-xs font-semibold text-purple-700 bg-purple-100 rounded-full">Ibu Cakap Usaha</span></td>
+                            <td class="p-4 text-gray-600">081234567890</td>
+                            <td class="p-4 text-gray-600">26 Juni 2025</td>
+                            <td class="p-4 text-center">
+                                <button class="detail-pendaftar-btn text-blue-500 hover:text-blue-700">Lihat Detail</button>
+                            </td>
+                        </tr>
+                         <tr data-nama="Bunga Lestari" data-kelas="Ibu Rawat Bumi">
+                            <td class="p-4 font-medium text-gray-800">Bunga Lestari</td>
+                            <td class="p-4 text-gray-600"><span class="px-2 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">Ibu Rawat Bumi</span></td>
+                            <td class="p-4 text-gray-600">085678901234</td>
+                            <td class="p-4 text-gray-600">26 Juni 2025</td>
+                            <td class="p-4 text-center">
+                                <button class="detail-pendaftar-btn text-blue-500 hover:text-blue-700">Lihat Detail</button>
+                            </td>
+                        </tr>
+                        <tr data-nama="Retno Wulandari" data-kelas="Ibu Sejahtera">
+                            <td class="p-4 font-medium text-gray-800">Retno Wulandari</td>
+                            <td class="p-4 text-gray-600"><span class="px-2 py-1 text-xs font-semibold text-orange-700 bg-orange-100 rounded-full">Ibu Sejahtera</span></td>
+                            <td class="p-4 text-gray-600">087890123456</td>
+                            <td class="p-4 text-gray-600">25 Juni 2025</td>
+                            <td class="p-4 text-center">
+                                <button class="detail-pendaftar-btn text-blue-500 hover:text-blue-700">Lihat Detail</button>
+                            </td>
+                        </tr>
+                        <tr data-nama="Anisa Fitriani" data-kelas="Ibu Cakap Usaha">
+                            <td class="p-4 font-medium text-gray-800">Anisa Fitriani</td>
+                            <td class="p-4 text-gray-600"><span class="px-2 py-1 text-xs font-semibold text-purple-700 bg-purple-100 rounded-full">Ibu Cakap Usaha</span></td>
+                            <td class="p-4 text-gray-600">089012345678</td>
+                            <td class="p-4 text-gray-600">24 Juni 2025</td>
+                            <td class="p-4 text-center">
+                                <button class="detail-pendaftar-btn text-blue-500 hover:text-blue-700">Lihat Detail</button>
+                            </td>
+                        </tr>
+                         <tr data-nama="Dewi Sartika" data-kelas="Ibu Rawat Bumi">
+                            <td class="p-4 font-medium text-gray-800">Dewi Sartika</td>
+                            <td class="p-4 text-gray-600"><span class="px-2 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">Ibu Rawat Bumi</span></td>
+                            <td class="p-4 text-gray-600">082345678901</td>
+                            <td class="p-4 text-gray-600">23 Juni 2025</td>
+                            <td class="p-4 text-center">
+                                <button class="detail-pendaftar-btn text-blue-500 hover:text-blue-700">Lihat Detail</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="kelas" class="admin-section">
+             <div class="flex justify-between items-center mb-8">
+                <h2 class="text-3xl font-bold gradient-text">Kelola Program Kelas</h2>
+                <button id="add-kelas-btn" class="px-5 py-2.5 bg-purple-600 text-white font-medium rounded-lg hover:bg-purple-700 flex items-center"><i class="ri-add-line mr-2"></i> Tambah Kelas</button>
+             </div>
+             <div class="bg-white rounded-xl shadow-md overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="p-4 font-semibold text-gray-600">Nama Kelas</th>
+                            <th class="p-4 font-semibold text-gray-600">Deskripsi Singkat</th>
+                            <th class="p-4 font-semibold text-gray-600 text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y">
+                        <tr>
+                            <td class="p-4 font-medium text-gray-800">Ibu Cakap Usaha</td>
+                            <td class="p-4 text-gray-600 max-w-sm">Pengelolaan Manajemen dan Keuangan Usaha. Penguatan Potensi melalui pembuatan produk olahan lokal. Digital marketing.</td>
+                            <td class="p-4 text-center">
+                                <button class="edit-btn text-blue-500 hover:text-blue-700 mr-4">Edit</button>
+                                <button class="delete-btn text-red-500 hover:text-red-700">Hapus</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+             </div>
+        </section>
+
+        <section id="literasi" class="admin-section">...</section>
+        <section id="testimoni" class="admin-section">...</section>
+        <section id="pengaturan" class="admin-section">...</section>
+
+    </main>
+    
+    <div id="detail-pendaftar-modal" class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-30 hidden">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg">
+            <div class="flex justify-between items-center p-5 border-b">
+                <h3 class="text-2xl font-semibold gradient-text">Detail Pendaftar</h3>
+                <button class="close-modal-btn text-gray-400 hover:text-gray-700 text-3xl">×</button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-500">Nama Lengkap</label>
+                    <p id="detail-nama" class="text-lg text-gray-800 font-semibold"></p>
+                </div>
+                 <div>
+                    <label class="block text-sm font-medium text-gray-500">Kelas yang Dipilih</label>
+                    <p id="detail-kelas" class="text-lg text-gray-800"></p>
+                </div>
+                 <div>
+                    <label class="block text-sm font-medium text-gray-500">Nomor Telepon</label>
+                    <p id="detail-telepon" class="text-lg text-gray-800"></p>
+                </div>
+                 <div>
+                    <label class="block text-sm font-medium text-gray-500">Tanggal Pendaftaran</label>
+                    <p id="detail-tanggal" class="text-lg text-gray-800"></p>
+                </div>
+                <div class="text-right mt-6">
+                    <button type="button" class="close-modal-btn px-6 py-2 text-gray-700 border rounded-lg hover:bg-gray-100">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.admin-section');
+            
+            // --- Navigasi ---
+            function showSection(hash) {
+                const targetId = (hash && document.querySelector(hash)) ? hash.substring(1) : 'dashboard';
+                
+                sections.forEach(section => {
+                    section.classList.toggle('active', section.id === targetId);
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.toggle('bg-gray-700', link.getAttribute('href') === `#${targetId}`);
+                    link.classList.toggle('text-white', link.getAttribute('href') === `#${targetId}`);
+                });
+            }
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.location.hash = this.getAttribute('href');
+                });
+            });
+
+            window.addEventListener('hashchange', () => showSection(window.location.hash));
+            showSection(window.location.hash);
+
+            // --- Logika Modal Universal ---
+            const modals = document.querySelectorAll('.modal');
+            function closeModal(modal) {
+                modal.classList.add('hidden');
+            }
+            modals.forEach(modal => {
+                modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(modal); });
+                modal.querySelectorAll('.close-modal-btn').forEach(btn => {
+                    btn.addEventListener('click', () => closeModal(modal));
+                });
+            });
+
+            // --- Logika Halaman Data Pendaftar ---
+            const searchInput = document.getElementById('search-pendaftar');
+            const filterKelas = document.getElementById('filter-kelas');
+            const tabelPendaftar = document.getElementById('tabel-pendaftar').querySelector('tbody');
+            const detailModal = document.getElementById('detail-pendaftar-modal');
+
+            // Fungsi untuk filter dan search
+            function filterData() {
+                const searchText = searchInput.value.toLowerCase();
+                const kelasDipilih = filterKelas.value;
+
+                Array.from(tabelPendaftar.rows).forEach(row => {
+                    const nama = row.dataset.nama.toLowerCase();
+                    const kelas = row.dataset.kelas;
+
+                    const showByName = nama.includes(searchText);
+                    const showByKelas = !kelasDipilih || kelas === kelasDipilih;
+
+                    row.style.display = showByName && showByKelas ? '' : 'none';
+                });
+            }
+            searchInput.addEventListener('keyup', filterData);
+            filterKelas.addEventListener('change', filterData);
+            
+            // Tombol "Lihat Detail"
+            tabelPendaftar.addEventListener('click', (e) => {
+                if (e.target.classList.contains('detail-pendaftar-btn')) {
+                    const row = e.target.closest('tr');
+                    
+                    // Ambil data dari sel tabel
+                    const nama = row.cells[0].textContent;
+                    const kelas = row.cells[1].textContent;
+                    const telepon = row.cells[2].textContent;
+                    const tanggal = row.cells[3].textContent;
+
+                    // Isi data ke modal
+                    document.getElementById('detail-nama').textContent = nama;
+                    document.getElementById('detail-kelas').textContent = kelas;
+                    document.getElementById('detail-telepon').textContent = telepon;
+                    document.getElementById('detail-tanggal').textContent = tanggal;
+
+                    detailModal.classList.remove('hidden');
+                }
+            });
+
+        });
+    </script>
+</body>
+</html>
